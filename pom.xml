@@ -5,8 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.su.thrift</groupId>
-    <artifactId>thrift_perf_SecondDog</artifactId>
+    <artifactId>thrift-perf-dog</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>perf-thrift</module>
+        <module>perf-server</module>
+        <module>perf-client</module>
+    </modules>
 
     <properties>
         <org.springframework-version>4.3.0.RELEASE</org.springframework-version>
