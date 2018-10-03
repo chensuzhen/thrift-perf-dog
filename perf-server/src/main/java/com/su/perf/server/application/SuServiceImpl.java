@@ -18,6 +18,7 @@ public class SuServiceImpl implements SuService.Iface {
             case MINUS:
                 result.setResult(a - b);
                 result.setOperateType(op.name());
+                break;
             default:
                 throw new CatchableException(500, "Unsupported Operator type!");
         }

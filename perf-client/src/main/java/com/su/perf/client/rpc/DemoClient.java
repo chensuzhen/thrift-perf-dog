@@ -19,7 +19,7 @@ public class DemoClient {
         SuService.Client client = new SuService.Client(protocol);
         // 打开socket
         transport.open();
-        SuStruct result = client.simpleCalculate(1, 1, OperateType.SUM);
+        SuStruct result = client.simpleCalculate(1, 1, OperateType.MINUS);
         System.out.println(result.toString());
         transport.close();
     }
