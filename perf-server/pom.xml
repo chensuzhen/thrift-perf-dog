@@ -38,8 +38,12 @@
                     <!--<configurationSourceDirectory>conf</configurationSourceDirectory>-->
                     <!--<copyConfigurationDirectory>true</copyConfigurationDirectory>-->
                     <extraJvmArguments>
-                        -Xms65536m -Xmx65536m -XX:MaxDirectMemorySize=4000M -XX:+UseG1GC -XX:MaxGCPauseMillis=20
-                        -XX:+PrintReferenceGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC -verbose:gc
+                        -Xms8192m -Xmx8192m
+                        -XX:MaxDirectMemorySize=4000M
+                        -XX:+UseG1GC -XX:MaxGCPauseMillis=20
+                        -XX:+PrintReferenceGC -XX:+PrintGCDetails
+                        -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC
+                        -verbose:gc
                         -Xloggc:/home/work/log/perf-server/gc.log
                     </extraJvmArguments>
                     <programs>
