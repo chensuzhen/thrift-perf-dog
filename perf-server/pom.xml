@@ -18,4 +18,55 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <repositoryLayout>flat</repositoryLayout>
+                    <projectArtifactFirstInClassPath>true</projectArtifactFirstInClassPath>
+                    <!--<configurationDirectory>conf</configurationDirectory>-->
+                    <!--<configurationSourceDirectory>conf</configurationSourceDirectory>-->
+                    <!--<copyConfigurationDirectory>true</copyConfigurationDirectory>-->
+                    <extraJvmArguments>
+                        -Xms65536m -Xmx65536m -XX:MaxDirectMemorySize=4000M -XX:+UseG1GC -XX:MaxGCPauseMillis=20
+                        -XX:+PrintReferenceGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC -verbose:gc
+                        -Xloggc:/home/work/log/perf-server/gc.log
+                    </extraJvmArguments>
+                    <programs>
+                        <program>
+                            <mainClass>com.su.perf.server.main.ThreadedSelectServerMain</mainClass>
+                            <name>ThreadedSelectServer.sh</name>
+                        </program>
+                        <program>
+                            <mainClass>com.su.perf.server.main.HsHaServerMain</mainClass>
+                            <name>HsHaServerMain.sh</name>
+                        </program>
+                        <program>
+                            <mainClass>com.su.perf.server.main.ThreadPoolServerMain</mainClass>
+                            <name>ThreadPoolServerMain</name>
+                        </program>
+                    </programs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assemble</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
