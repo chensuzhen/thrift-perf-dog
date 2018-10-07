@@ -1,4 +1,4 @@
-package com.su.perf.client.rpc;
+package com.su.perf.client.demos;
 
 import com.su.thrift.OperateType;
 import com.su.thrift.SuService;
