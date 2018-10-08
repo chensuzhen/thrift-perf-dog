@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info">
+    <Properties>
+        <Property name="PRO_NAME">${project_name}</Property>
+        <Property name="LOG_HOME">/home/work/log/thrift-perf-dog/${project_name}</Property>
+        <Property name="PID">????</Property>
+        <Property name="LOG_PATTERN">
+            %clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{%5p} %clr{${sys:PID}}{magenta}
+            %clr{---}{faint} %clr{[%t]}{faint} %clr{%c{1.}}{cyan} %clr{:}{faint} %m%n%xwEx
+        </Property>
+    </Properties>
+
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <!--<Pattern>${LOG_PATTERN}</Pattern>-->
+                <Pattern>%d %p %c{1.} [%t] - %m%n</Pattern>
+            </PatternLayout>
+        </Console>
+
+        <RollingRandomAccessFile name="application"
+                                 fileName="${LOG_HOME}/application.log"
+                                 filePattern="${LOG_HOME}/application-%d{yyyy-MM-dd}.log.gz"
+                                 append="true">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] - %m%n</Pattern>
+            </PatternLayout>
+
+            <Policies>
+                <!--在启动时-->
+                <OnStartupTriggeringPolicy/>
+                <!--或在最小时间单位变动时-->
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+            <!--启动以下策略-->
+            <DefaultRolloverStrategy max="10">
+                <!--maxDepth：文件夹深度限制为2-->
+                <Delete basePath="${LOG_HOME}" maxDepth="2">
+                    <IfFileName glob="**.log.gz"/>
+                    <!--日志保存7天-->
+                    <IfLastModified age="7d"/>
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="file"
+                                 fileName="${LOG_HOME}/${PRO_NAME}.log"
+                                 filePattern="${LOG_HOME}/${PRO_NAME}-%d{yyyy-MM-dd}.log.gz"
+                                 immediateFlush="true" append="true">
+            <PatternLayout>
+                <Pattern>%d %p %c{1.} [%t] - %m%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            </Policies>
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <logger name="com.su.perf.client" level="${log4j_level}" additivity="true">
+            <AppenderRef ref="file"/>
+        </logger>
+        <Root level="info">
+            <AppenderRef ref="application"/>
+        </Root>
+    </Loggers>
+</Configuration>

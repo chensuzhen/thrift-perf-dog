@@ -24,7 +24,7 @@ public class ThreadedSelectServerMain {
             arg.processorFactory(new TProcessorFactory(processor));
             TServer server = new TThreadedSelectorServer(arg);
 
-            System.out.println("Starting the  Thrift ThreadedSelector server ...");
+            logger.warn("Starting the  Thrift ThreadedSelector server ...");
             server.serve();
         } catch (Exception e) {
             logger.error("Error in start Thrift ThreadedSelector server", e);

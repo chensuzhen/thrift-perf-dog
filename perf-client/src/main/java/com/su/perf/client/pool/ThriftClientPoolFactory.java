@@ -21,7 +21,11 @@ public class ThriftClientPoolFactory
     @Override
     public void destroyObject(final Endpoint endpoint, final PooledObject<ThriftClientObject> p)
             throws Exception {
-        // The default implementation is a no-op.
         ThriftClientObject.destoryClientObject(p.getObject());
+    }
+
+    @Override
+    public boolean validateObject(final Endpoint endpoint, final PooledObject<ThriftClientObject> p) {
+        return ThriftClientObject.validClientObject(p.getObject());
     }
 }

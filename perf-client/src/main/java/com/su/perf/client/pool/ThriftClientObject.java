@@ -30,7 +30,7 @@ public class ThriftClientObject<TClient extends TServiceClient> {
         return endpoint;
     }
 
-    public static ThriftClientObject createClientObject(Endpoint endpoint) {
+    public static ThriftClientObject createClientObject(Endpoint endpoint) throws TTransportException {
         // 设置调用的服务地址-端口
         TTransport transport =
                 new TFramedTransport(new TSocket(endpoint.getHost(), endpoint.getPort(), DEFAULT_CLIENT_TIME_OUT));
@@ -42,7 +42,7 @@ public class ThriftClientObject<TClient extends TServiceClient> {
         try {
             transport.open();
         } catch (TTransportException e) {
-            e.printStackTrace();
+            throw e;
         }
 
         return new ThriftClientObject(client, endpoint);
@@ -51,5 +51,10 @@ public class ThriftClientObject<TClient extends TServiceClient> {
     public static void destoryClientObject(ThriftClientObject thriftClientObject) {
         thriftClientObject.gettClient().getOutputProtocol().getTransport().close();
         thriftClientObject.gettClient().getInputProtocol().getTransport().close();
+    }
+
+    public static boolean validClientObject(ThriftClientObject thriftClientObject) {
+        return thriftClientObject.gettClient().getInputProtocol().getTransport().isOpen() &&
+                thriftClientObject.gettClient().getOutputProtocol().getTransport().isOpen();
     }
 }

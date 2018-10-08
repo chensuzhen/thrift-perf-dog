@@ -28,4 +28,90 @@
             <version>3.7</version>
         </dependency>
     </dependencies>
+
+    <properties>
+        <log4j_level>info</log4j_level>
+        <project_name>perf-client</project_name>
+    </properties>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.4.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <bannedDependencies>
+                                    <!--是否检查传递性依赖(间接依赖)-->
+                                    <searchTransitive>true</searchTransitive>
+                                    <excludes>
+                                        <!--groupId[:artifactId][:version][:type][:scope][:classifier]-->
+                                        <exclude>com.google.collections:google-collections</exclude>
+                                        <exclude>log4j</exclude>
+                                        <exclude>slf4j-log4j12</exclude>
+                                        <exclude>commons-logging</exclude>
+                                        <exclude>ch.qos.logback</exclude>
+                                        <exclude>org.slf4j:slf4j-jdk14</exclude>
+                                        <exclude>org.slf4j:slf4j-simple</exclude>
+                                        <exclude>org.slf4j:slf4j-nop</exclude>
+                                        <exclude>org.slf4j:slf4j-jcl</exclude>
+                                    </excludes>
+                                </bannedDependencies>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <configuration>
+                    <repositoryLayout>flat</repositoryLayout>
+                    <projectArtifactFirstInClassPath>true</projectArtifactFirstInClassPath>
+                    <!--<configurationDirectory>conf</configurationDirectory>-->
+                    <!--<configurationSourceDirectory>conf</configurationSourceDirectory>-->
+                    <!--<copyConfigurationDirectory>true</copyConfigurationDirectory>-->
+                    <extraJvmArguments>
+                        -Xms8192m -Xmx8192m
+                        -XX:MaxDirectMemorySize=4000M
+                        -XX:+UseG1GC -XX:MaxGCPauseMillis=20
+                        -XX:+PrintReferenceGC -XX:+PrintGCDetails
+                        -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC
+                        -verbose:gc
+                        -Xloggc:/home/work/log/thrift-perf-dog/perf-server/gc.log
+                    </extraJvmArguments>
+                    <programs>
+                        <program>
+                            <mainClass>com.su.perf.client.rpc.SyncClientPoolTest</mainClass>
+                            <name>SyncClientPoolTest.sh</name>
+                        </program>
+                    </programs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assemble</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
